@@ -1,0 +1,15 @@
+# This file is machine-generated - editing it directly is not advised
+
+[[DelimitedFiles]]
+deps = ["Mmap"]
+uuid = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+
+[[ISOCurrencies]]
+git-tree-sha1 = "204b1d228b42b033dca526d607a91fef7f3bafa6"
+repo-rev = "master"
+repo-url = "https://github.com/JuliaFinance/ISOCurrencies.jl.git"
+uuid = "5683cba2-2ced-11e9-0d3f-33b1fe4e9d91"
+version = "0.1.0"
+
+[[Mmap]]
+uuid = "a63ad114-7e13-5084-954f-fe012c677804"
