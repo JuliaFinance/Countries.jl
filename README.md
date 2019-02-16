@@ -13,25 +13,59 @@ Data for this package was obtained from https://datahub.io/core/country-codes.
 
 ## Usage
 
-This package provides a `Country` type with the following fields:
-
-```julia
-struct Country
-    name::String
-    code::Int
-    currency::Currencies.Currency
-    capital::String
-    continent::String
-    developed::Bool
-    region::String
-    subregion::String
-end
-```
-
-You can access a country using its 2-character ISO code:
-
 ```julia
 julia> using Countries
-julia> Countries.US
-Countries.Country("United States of America", 840, US Dollar, "Washington", "NA", true, "Americas", "Northern America")
+julia> import Countries: name, code, capital, continent, isdeveloping, region, subregion, currencies, US, PH, HK, SG
+julia> cs = [US,PH,HK,SG];
+julia> for c in cs
+       println("Country: $(c)")
+       println("Name: $(name(c))")
+       println("Code: $(code(c))")
+       println("Capital: $(capital(c))")
+       println("Continent: $(continent(c))")
+       println("Developing: $(isdeveloping(c))")
+       println("Region: $(region(c))")
+       println("Subregion: $(subregion(c))")
+       println("Currencies: $(currencies(c))\n")
+       end
+
+Country: US
+Name: United States of America
+Code: 840
+Capital: Washington
+Continent: NA
+Developing: false
+Region: Americas
+Subregion: Northern America
+Currencies: Currencies.Currency[USD]
+
+Country: PH
+Name: Philippines
+Code: 608
+Capital: Manila
+Continent: AS
+Developing: true
+Region: Asia
+Subregion: South-eastern Asia
+Currencies: Currencies.Currency[PHP]
+
+Country: HK
+Name: China, Hong Kong Special Administrative Region
+Code: 344
+Capital: Hong Kong
+Continent: AS
+Developing: true
+Region: Asia
+Subregion: Eastern Asia
+Currencies: Currencies.Currency[HKD]
+
+Country: SG
+Name: Singapore
+Code: 702
+Capital: Singapore
+Continent: AS
+Developing: true
+Region: Asia
+Subregion: South-eastern Asia
+Currencies: Currencies.Currency[SGD]
 ```

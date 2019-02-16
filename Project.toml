@@ -4,5 +4,11 @@ authors = ["Eric Forgy <Eric.Forgy@coherentasia.com>"]
 version = "0.1.0"
 
 [deps]
+Currencies = "0fd90b74-7c1f-579e-9252-02cd883047b9"
 DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
-ISOCurrencies = "5683cba2-2ced-11e9-0d3f-33b1fe4e9d91"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
