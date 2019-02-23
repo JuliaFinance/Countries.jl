@@ -3,7 +3,8 @@ module Countries
 # Data obtained from https://datahub.io/core/country-codes
 # Consider downloading data in build.jl?
 
-using DelimitedFiles, Currencies
+using DelimitedFiles, Reexport
+@reexport using Currencies
 
 const (data,headers) = readdlm(joinpath(@__DIR__,"data","country-codes.csv"),',',header=true)
 

@@ -6,6 +6,7 @@ version = "0.1.0"
 [deps]
 Currencies = "0fd90b74-7c1f-579e-9252-02cd883047b9"
 DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
