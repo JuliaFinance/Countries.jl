@@ -10,7 +10,14 @@ export Currencies
 
 const (data,headers) = readdlm(joinpath(@__DIR__,"data","country-codes.csv"),',',header=true)
 
-struct Country{T} end
+struct Country{T} 
+    function Country{T}() where T
+        c = new()
+        list[T] = c
+        return c
+    end
+end
+const list = Dict{Symbol,Country}()
 
 const (nrow,ncol) = size(data)
 for i in 1:nrow
