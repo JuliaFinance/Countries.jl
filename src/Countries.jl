@@ -3,8 +3,10 @@ module Countries
 # Data obtained from https://datahub.io/core/country-codes
 # Consider downloading data in build.jl?
 
-using DelimitedFiles, Reexport
-@reexport using Currencies
+using DelimitedFiles
+using Currencies
+
+export Currencies
 
 const (data,headers) = readdlm(joinpath(@__DIR__,"data","country-codes.csv"),',',header=true)
 
@@ -24,6 +26,7 @@ for i in 1:nrow
             region(::Country{Symbol($(country))}) = $(data[i,50])
             subregion(::Country{Symbol($(country))}) = $(data[i,53])
             Base.show(io::Base.IO,::Country{Symbol($(country))}) = print(io,$(country))
+            Base.show(io::Base.IO,::MIME"text/plain",::Country{Symbol($(country))}) = print(io,$(country))
         end
         ccys = Vector{Currencies.Currency}()
         currencies = split(data[i,10],",")
