@@ -6,7 +6,8 @@ module Countries
 using DelimitedFiles
 using Currencies
 
-export Currencies, Country
+export Currencies, Currency
+export Country
 
 const (data,headers) = readdlm(joinpath(@__DIR__,"data","country-codes.csv"),',',header=true)
 
