@@ -1,24 +1,28 @@
 # Countries.jl
 
-<!-- [![Build Status](https://travis-ci.org/JuliaFinance/ISOCurrencies.jl.svg?branch=master)](https://travis-ci.org/JuliaFinance/ISOCurrencies.jl)
-[![Build status](https://ci.appveyor.com/api/projects/status/1593mlsleriaex4j?svg=true)](https://ci.appveyor.com/project/EricForgy/isocurrencies-jl) -->
+This is a core package for the JuliaFinance ecosytem. 
 
-## Purpose
+It provides the `Country` singleton type, based on the ISO 3166 standard
+together with nine methods:
 
-This package provides standard country names and various codes.
-
-## Data Source
-
-Data for this package was obtained from https://datahub.io/core/country-codes.
+- `symbol`: The 2-character ISO 3166 alpha symbol of the country.
+- `country`: The singleton type instance for a particular country symbol.
+- `name`: The full name of the country.
+- `code`: The ISO 3166 code for the country.
+- `capital`: The capital of the country.
+- `continent`: The continent of the country.
+- `isdeveloping`: Whether the country is developed or is developing (boolean).
+- `region`: The region of the country.
+- `subregion`: The subregion of the country.
 
 ## Usage
 
 ```julia
 julia> using Countries
-julia> import Countries: name, code, capital, continent, isdeveloping, region, subregion, currencies, US, PH, HK, SG
-julia> cs = [US,PH,HK,SG];
+julia> import Countries: country, symbol, name, code, capital, continent, isdeveloping, region, subregion, currencies
+julia> cs = country.([:US,:PH,:HK,:SG]);
 julia> for c in cs
-       println("Country: $(c)")
+       println("Country: $(symbol(c))")
        println("Name: $(name(c))")
        println("Code: $(code(c))")
        println("Capital: $(capital(c))")
@@ -37,7 +41,7 @@ Continent: NA
 Developing: false
 Region: Americas
 Subregion: Northern America
-Currencies: Currencies.Currency[USD]
+Currencies: [:USD]
 
 Country: PH
 Name: Philippines
@@ -47,7 +51,7 @@ Continent: AS
 Developing: true
 Region: Asia
 Subregion: South-eastern Asia
-Currencies: Currencies.Currency[PHP]
+Currencies: [:PHP]
 
 Country: HK
 Name: China, Hong Kong Special Administrative Region
@@ -57,7 +61,7 @@ Continent: AS
 Developing: true
 Region: Asia
 Subregion: Eastern Asia
-Currencies: Currencies.Currency[HKD]
+Currencies: [:HKD]
 
 Country: SG
 Name: Singapore
@@ -67,5 +71,9 @@ Continent: AS
 Developing: true
 Region: Asia
 Subregion: South-eastern Asia
-Currencies: Currencies.Currency[SGD]
+Currencies: [:SGD]
 ```
+
+## Data Source
+
+Data for this package was obtained from https://datahub.io/core/country-codes.
