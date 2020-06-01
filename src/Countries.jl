@@ -1,40 +1,112 @@
+"""
+Countries
+
+This package provides the `Country` singleton type, based on the ISO 3166 standard
+together with ten methods:
+
+- `symbol`: The 2-character ISO 3166 alpha symbol of the country.
+- `country`: The singleton type instance for a particular country symbol
+- `name`: The full name of the country.
+- `code`: The ISO 3166 code for the country.
+- `currencies`: An array of ISO 4167 alpha currency symbols for the country.
+- `capital`: The capital of the country.
+- `continent`: The continent of the country.
+- `isdeveloping`: Whether the country is developed or is developing (boolean).
+- `region`: The region of the country.
+- `subregion`: The subregion of the country.
+
+See README.md for the full documentation
+
+Copyright 2019-2020, Eric Forgy, Scott P. Jones and other contributors
+
+Licensed under MIT License, see LICENSE.md
+"""
 module Countries
 
-# Data obtained from https://datahub.io/core/country-codes
-# Consider downloading data in build.jl?
+export Country
 
-using DelimitedFiles, Reexport
-@reexport using Currencies
+"""
+This is a singleton type, intended to be used as a label for dispatch purposes
+"""
+struct Country{S} end
+Country(
+    symbol::Symbol,
+    name::AbstractString,
+    code::Integer,
+    capital::AbstractString,
+    continent::AbstractString,
+    isdeveloping::Bool,
+    region::AbstractString,
+    subregion::AbstractString) = 
+    (get!(_country_data, symbol) do
+        (
+            Country{symbol}(),
+            name,
+            code,
+            capital,
+            continent,
+            isdeveloping,
+            region,
+            subregion
+        )
+    end)[1]
 
-const (data,headers) = readdlm(joinpath(@__DIR__,"data","country-codes.csv"),',',header=true)
+include(joinpath(@__DIR__, "..", "deps", "country-data.jl"))
 
-struct Country{T} end
+"""
+Returns the 2-character ISO 3166 alpha symbol associated with the country
+"""
+function symbol end
 
-const (nrow,ncol) = size(data)
-for i in 1:nrow
-    country = data[i,7]
-    if length(country) == 2
-        @eval begin
-            $(Symbol(country)) = Country{Symbol($(country))}()
-            name(::Country{Symbol($(country))}) = $(data[i,3])
-            code(::Country{Symbol($(country))}) = $(data[i,9])
-            capital(::Country{Symbol($(country))}) = $(data[i,29])
-            continent(::Country{Symbol($(country))}) = $(data[i,30])
-            isdeveloping(::Country{Symbol($(country))}) = isequal($(data[i,32]),"Developing")
-            region(::Country{Symbol($(country))}) = $(data[i,50])
-            subregion(::Country{Symbol($(country))}) = $(data[i,53])
-            Base.show(io::Base.IO,::Country{Symbol($(country))}) = print(io,$(country))
-        end
-        ccys = Vector{Currencies.Currency}()
-        currencies = split(data[i,10],",")
-        for currency in currencies
-            if isdefined(Currencies,Symbol(currency))
-                @eval ccy = Currencies.$(Symbol(currency))
-                push!(ccys,ccy)
-            end
-        end
-        @eval currencies(::Country{Symbol($(country))}) = $(ccys)
-    end
+"""
+Returns an instance of the singleton type Country{symbol}
+"""
+function country end
+
+"""
+Returns the name associated with this value
+"""
+function name end
+
+"""
+Returns the ISO 3166 numeric code associated with this value
+"""
+function code end
+
+"""
+Returns the capital associated with this value
+"""
+function capital end
+
+"""
+Returns the continent associated with this value
+"""
+function continent end
+
+"""
+Returns `true` if the country is developing and `false` if developed.
+"""
+function isdeveloping end
+
+"""
+Returns the region associated with this value
+"""
+function region end
+
+"""
+Returns the subregion associated with this value
+"""
+function subregion end
+
+symbol(::Country{S}) where {S} = S
+country(S::Symbol) = _country_data[S][1]
+ms = [:name, :code, :currencies, :capital, :continent, :isdeveloping, :region, :subregion]
+for (i,m) in enumerate(ms)
+    @eval $m(S::Symbol) = _country_data[S][$(i+1)]
+    @eval $m(::Country{S}) where {S} = $m(S)
 end
 
-end # module
+allsymbols()  = keys(_country_data)
+allpairs() = pairs(_country_data)
+
+end # module Countries
