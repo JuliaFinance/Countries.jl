@@ -53,6 +53,10 @@ Country(
 
 include(joinpath(@__DIR__, "..", "deps", "country-data.jl"))
 
+for (s,(country,_,_,_,_,_,_,_,_)) in _country_data
+    @eval const $s = $country
+end
+
 """
 Returns the 2-character ISO 3166 alpha symbol associated with the country
 """
