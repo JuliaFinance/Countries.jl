@@ -1,15 +1,14 @@
 # Countries.jl
 
-This is a core package for the JuliaFinance ecosytem. 
-
-It provides the `Country` singleton type, based on the ISO 3166 standard
-together with ten methods:
+This package provides the `Country` singleton type, based on the ISO 3166 standard
+together with eleven methods:
 
 - `symbol`: The 2-character ISO 3166 alpha symbol of the country.
-- `country`: The singleton type instance for a particular country symbol.
+- `country`: The singleton type instance for a particular country symbol
 - `name`: The full name of the country.
 - `code`: The ISO 3166 code for the country.
 - `currencies`: An array of ISO 4167 alpha currency symbols for the country.
+- `dial`: Country code for phone numbers.
 - `capital`: The capital of the country.
 - `continent`: The continent of the country.
 - `isdeveloping`: Whether the country is developed or is developing (boolean).

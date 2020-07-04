@@ -1,50 +1,64 @@
-import Pkg; Pkg.add("JSON3") # Just in case
+const outputname = joinpath(@__DIR__, "country-data.jl")
+
+# First, check if currency-data.jl already exists
+isfile(outputname) && exit()
 
 using JSON3
 
 const src = "https://pkgstore.datahub.io/core/country-codes/country-codes_json/data/471a2e653140ecdd7243cdcacfd66608/country-codes_json.json"
 
 inputname = joinpath(@__DIR__, "country-codes.json")
-outputname = joinpath(@__DIR__, "country-data.jl")
 
-# First, check if currency-data.jl already exists
-isfile(outputname) && return
-
-# Only download the file from datahub.io if not already present
-if !isfile(inputname)
-    println("Downloading currency data: ", src)
-    download(src, inputname)
-end
-
-const country_list = open(io -> JSON3.read(io), inputname)
+const country_list = Dict{String,Tuple}()
 
 function genfile(io)
+    for c in country_data
+        (cntry = c["ISO3166-1-Alpha-2"]) === nothing && continue
+        (nm = c["official_name_en"]) === nothing && continue
+        (cd = c["ISO3166-1-numeric"]) === nothing && continue
+        ccy_str = c["ISO4217-currency_alphabetic_code"]
+        ccy = ccy_str === nothing ? Symbol[] : Symbol.(split(ccy_str,","))
+        d = c["Dial"]
+        cap = c["Capital"]
+        cont = c["Continent"]
+        isdev = isequal(c["Developed / Developing Countries"],"Developing")
+        reg = c["Region Name"]
+        sreg = c["Sub-region Name"]
+
+        country_list[cntry] = (nm,cd,ccy,d,cap,cont,isdev,reg,sreg)
+    end
     println(io, "const _country_data = Dict(")
-    for c in country_list
-        isnothing(c["official_name_en"]) && continue
-        isnothing(c["ISO3166-1-Alpha-2"]) && continue
-        isnothing(c["ISO4217-currency_alphabetic_code"]) && continue
-        country = c["ISO3166-1-Alpha-2"]
-        official_name = c["official_name_en"]
-        code = c["ISO3166-1-numeric"]
-        currencies = Symbol.(split(c["ISO4217-currency_alphabetic_code"],","))
-        capital = c["Capital"]
-        continent = c["Continent"]
-        isdeveloping = isequal(c["Developed / Developing Countries"],"Developing")
-        region = c["Region Name"]
-        subregion = c["Sub-region Name"]
-        print(io, "    :$(country) => (Country{:$(country)}(),",
-            "\"$(official_name)\",",
-            code,",",
-            currencies,",",
-            "\"$(capital)\",",
-            "\"$(continent)\",",
-            isdeveloping,",",
-            "\"$(region)\",",
-            "\"$(subregion)\"),\n")
+    for (c, val) in country_list
+        # println(io, "    :$curr => (Currency{:$curr}, $(val[1]), $(lpad(val[2], 4)), \"$(val[3])\"),")
+        
+        print(io, "    :$c => (Country{:$c},",
+            "\"$(val[1])\",",
+            val[2],",",
+            val[3],",",
+            "\"$(val[4])\",",
+            "\"$(val[5])\",",
+            "\"$(val[6])\",",
+            val[7],",",
+            "\"$(val[8])\",",
+            "\"$(val[9])\"),\n")
     end
     println(io, ")\n")
+
+    #     print(io, "    :$(country) => (Country{:$(country)},",
+    #         "\"$(official_name)\",",
+    #         code,",",
+    #         currencies,",",
+    #         "\"$(dial)\",",
+    #         "\"$(capital)\",",
+    #         "\"$(continent)\",",
+    #         isdeveloping,",",
+    #         "\"$(region)\",",
+    #         "\"$(subregion)\"),\n")
+    # end
+    # println(io, ")\n")
 end
+
+const country_data = open(io -> JSON3.read(io), inputname)
 
 open(io -> genfile(io), outputname, "w")
 

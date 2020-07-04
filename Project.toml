@@ -1,12 +1,12 @@
 name = "Countries"
 uuid = "82bc9f9d-56a2-5453-b677-633a29649040"
-authors = ["Eric Forgy <Eric.Forgy@cavalre.com>"]
-version = "0.1.0"
+authors = ["Eric Forgy <Eric.Forgy@cavalre.com>", "ScottPJones <scottjones@alum.mit.edu>"]
+version = "0.2.0"
 
 [extras]
-Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
+JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-build = ["Pkg"]
+build = ["JSON3"]
 test = ["Test"]
