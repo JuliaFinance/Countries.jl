@@ -24,7 +24,8 @@ Licensed under MIT License, see LICENSE.md
 """
 module Countries
 
-export Country
+export Country, country, @country
+export name, code, currencies, dial, capital, continent, isdeveloping, region, subregion
 
 """
 This is a singleton type, intended to be used as a label for dispatch purposes
@@ -54,6 +55,13 @@ function country end
 country(S::Symbol) = _country_data[S][1]
 
 country(::Type{C}) where {C<:Country} = C
+
+macro country(syms)
+    args = syms isa Expr ? syms.args : [syms]
+    for nam in args
+        @eval __module__ const $nam = Countries.$nam
+    end
+end
 
 """
 Returns the official name from the UN Statistics Division.
@@ -108,5 +116,10 @@ end
 
 allsymbols()  = keys(_country_data)
 allpairs() = pairs(_country_data)
+
+# Contruct cash position types for convenience.
+for (s,(cntry,u,c,n)) in Countries.allpairs()
+    @eval const $s = typeof($(country(cntry))())
+end
 
 end # module Countries
