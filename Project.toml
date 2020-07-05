@@ -1,7 +1,7 @@
 name = "Countries"
 uuid = "82bc9f9d-56a2-5453-b677-633a29649040"
 authors = ["Eric Forgy <Eric.Forgy@cavalre.com>", "ScottPJones <scottjones@alum.mit.edu>"]
-version = "0.2.0"
+version = "0.2.1"
 
 [extras]
 JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
