@@ -24,7 +24,7 @@ Licensed under MIT License, see LICENSE.md
 """
 module Countries
 
-export Country, country, @country
+export Country, symbol, country, @country
 export name, code, currencies, dial, capital, continent, isdeveloping, region, subregion
 
 """
@@ -45,7 +45,7 @@ Returns the 2-character ISO 3166 alpha symbol associated with the country
 """
 function symbol end
 
-symbol(::Country{S}) where {S} = S
+symbol(::Type{Country{S}}) where {S} = S
 
 """
 Returns an instance of the singleton type Country{symbol}
